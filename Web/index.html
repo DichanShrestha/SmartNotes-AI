@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartNotes AI - Dashboard</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="navbar">
+        <h1>SmartNotes AI</h1>
+        <button id="logoutBtn" class="btn btn-secondary">Logout</button>
+    </header>
+    <main class="dashboard">
+        <section class="stats-panel">
+            <div class="stat-card"><h3>Documents</h3><p id="statDocs">0</p></div>
+            <div class="stat-card"><h3>Quizzes</h3><p id="statQuizzes">0</p></div>
+            <div class="stat-card"><h3>Avg Score</h3><p id="statScore">0%</p></div>
+            <div class="stat-card"><h3>Streak</h3><p id="statStreak">0 Days</p></div>
+        </section>
+        
+        <section class="documents-panel">
+            <h2>Your Documents</h2>
+            <div class="upload-section">
+                <input type="file" id="pdfUpload" accept="application/pdf" />
+                <button id="uploadBtn" class="btn">Upload PDF</button>
+            </div>
+            <div id="documentsList" class="doc-list">
+                <!-- Document items will be rendered here -->
+            </div>
+        </section>
+
+        <section class="study-panel">
+            <h2>Due for Review</h2>
+            <div id="dueList" class="due-list">
+                <!-- Study plan items will be rendered here -->
+            </div>
+        </section>
+    </main>
+    <script src="js/app.js"></script>
+</body>
+</html>
