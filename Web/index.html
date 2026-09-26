@@ -8,30 +8,51 @@
 </head>
 <body>
     <div class="app-container">
-        <!-- Top Navbar -->
-        <header class="navbar">
-            <div class="navbar-inner">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
                 <div class="brand" onclick="navigateTo('dashboard')">
                     <div class="brand-icon">⚡</div>
                     <span class="brand-text">SmartNotes AI</span>
-                    <span class="brand-badge">PRO</span>
-                </div>
-                <div class="nav-actions">
-                    <button class="btn btn-secondary btn-sm" onclick="navigateTo('studyPlan')">📚 Study Plan</button>
-                    <div class="streak-pill" title="Consecutive learning streak">
-                        <span class="streak-flame">🔥</span>
-                        <span id="navStreak">0 Days</span>
-                    </div>
-                    <div class="user-profile">
-                        <div class="user-avatar" id="navAvatar">U</div>
-                        <span class="user-name" id="navUsername">User</span>
-                    </div>
-                    <button id="logoutBtn" class="btn btn-secondary btn-sm">Logout</button>
                 </div>
             </div>
-        </header>
+            
+            <nav class="sidebar-nav">
+                <div class="sidebar-link active" id="nav-dashboard" onclick="navigateTo('dashboard')">
+                    <span>📊</span> Dashboard
+                </div>
+                <div class="sidebar-link" id="nav-studyPlan" onclick="navigateTo('studyPlan')">
+                    <span>📚</span> Study Plan
+                </div>
+                <!-- Additional SaaS Links can go here -->
+                <div class="sidebar-link" onclick="alert('Feature coming soon!')">
+                    <span>⚙️</span> Settings
+                </div>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-profile" style="margin-bottom: 1rem;">
+                    <div class="user-avatar" id="navAvatar" style="background: var(--accent-tertiary);">U</div>
+                    <div>
+                        <div class="user-name" id="navUsername">User</div>
+                        <div style="font-size: 0.75rem; color: var(--text-muted);">Pro Plan</div>
+                    </div>
+                </div>
+                <button id="logoutBtn" class="btn btn-secondary btn-sm" style="width: 100%;">Logout</button>
+            </div>
+        </aside>
 
         <main class="main-content">
+            <!-- Content Header -->
+            <header class="content-header">
+                <h1 id="pageTitle" style="font-size: 1.5rem; margin: 0;">Dashboard</h1>
+                <div class="nav-actions">
+                    <div class="streak-pill" title="Consecutive learning streak" style="border-color: var(--accent-tertiary); background: rgba(37,99,235,0.1); color: var(--accent-tertiary);">
+                        <span class="streak-flame">🔥</span>
+                        <span id="navStreak" style="color: var(--accent-tertiary);">0 Days</span>
+                    </div>
+                </div>
+            </header>
             <!-- ================= VIEW 1: DASHBOARD ================= -->
             <div id="dashboardView" class="view-container active">
                 <!-- Stats Grid -->

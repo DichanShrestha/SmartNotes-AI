@@ -28,6 +28,7 @@ function getAuthHeaders(isJson = true) {
 }
 
 async function apiFetch(endpoint, options = {}) {
+    // We attach the authorization header if we have a token stored in our AppState.
     if (!options.headers) {
         options.headers = getAuthHeaders(options.body && !(options.body instanceof FormData));
     }
@@ -35,13 +36,15 @@ async function apiFetch(endpoint, options = {}) {
     try {
         let response = await fetch(`${API_BASE}${endpoint}`, options);
 
-        // Handle Token Expiration
+        // Oops! Looks like the token expired (401). Let's try to refresh it silently.
+        // If we can get a new one, we retry the original request.
         if (response.status === 401 && AppState.refreshToken && !endpoint.includes('/auth/')) {
             const refreshed = await attemptTokenRefresh();
             if (refreshed) {
                 options.headers['Authorization'] = `Bearer ${AppState.token}`;
                 response = await fetch(`${API_BASE}${endpoint}`, options);
             } else {
+                // If refresh fails, boot the user out so they can log back in.
                 logout();
                 return null;
             }
@@ -217,29 +220,45 @@ function renderMarkdown(md) {
 }
 
 // --- Navigation Controller ---
+// This handles our SPA routing. It swaps out the active view and manages sidebar highlights.
 function navigateTo(viewName, params = {}) {
     AppState.currentView = viewName;
 
+    // First, hide all views
     document.querySelectorAll('.view-container').forEach(el => el.classList.remove('active'));
+
+    // Update sidebar highlights
+    document.querySelectorAll('.sidebar-link').forEach(el => el.classList.remove('active'));
+    const sidebarLink = document.getElementById(`nav-${viewName}`);
+    if (sidebarLink) sidebarLink.classList.add('active');
+
+    // Update page title in the header
+    const pageTitle = document.getElementById('pageTitle');
 
     if (viewName === 'dashboard') {
         const view = document.getElementById('dashboardView');
         if (view) view.classList.add('active');
+        if (pageTitle) pageTitle.textContent = 'Dashboard';
         loadDashboard();
     } else if (viewName === 'documentDetail') {
         const view = document.getElementById('documentDetailView');
         if (view) view.classList.add('active');
+        if (pageTitle) pageTitle.textContent = 'Document Details';
         if (params.docId) {
             loadDocumentDetail(params.docId, params.tab || 'notes');
         }
     } else if (viewName === 'quizTaking') {
         const view = document.getElementById('quizTakingView');
         if (view) view.classList.add('active');
+        if (pageTitle) pageTitle.textContent = 'Quiz Attempt';
     } else if (viewName === 'studyPlan') {
         const view = document.getElementById('studyPlanView');
         if (view) view.classList.add('active');
+        if (pageTitle) pageTitle.textContent = 'Study Plan';
         loadStudyPlanFilter('due');
     }
+    
+    // Smooth scroll back to top for a fresh feel
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -447,6 +466,7 @@ async function handleFileUpload(file) {
 }
 
 // --- Dashboard Loader ---
+// Pulls in the latest stats, recent docs, and items due for review from the backend.
 async function loadDashboard() {
     try {
         const res = await apiFetch('/dashboard');
@@ -462,6 +482,7 @@ async function loadDashboard() {
             const statStreak = document.getElementById('statStreak');
             const navStreak = document.getElementById('navStreak');
 
+            // Fallback to 0 if we don't have the data yet
             if (statDocs) statDocs.textContent = data.Stats.DocumentsProcessed ?? 0;
             if (statQuizzes) statQuizzes.textContent = data.Stats.QuizzesCompleted ?? 0;
             if (statScore) statScore.textContent = `${data.Stats.AverageScore ?? 0}%`;
