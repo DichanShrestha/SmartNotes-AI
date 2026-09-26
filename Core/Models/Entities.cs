@@ -11,6 +11,8 @@ namespace SmartNotesAI.Core.Models
         public string DisplayName { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? LastLoginAt { get; set; }
+        public string RefreshToken { get; set; }
+        public DateTime? RefreshTokenExpiryTime { get; set; }
 
         public virtual ICollection<Document> Documents { get; set; }
     }
@@ -30,6 +32,9 @@ namespace SmartNotesAI.Core.Models
 
         public virtual User User { get; set; }
         public virtual ICollection<DocumentSection> Sections { get; set; }
+        public virtual ICollection<Note> Notes { get; set; }
+        public virtual ICollection<Quiz> Quizzes { get; set; }
+        public virtual ICollection<StudyPlanItem> StudyPlanItems { get; set; }
     }
 
     public class DocumentSection
@@ -68,6 +73,7 @@ namespace SmartNotesAI.Core.Models
 
         public virtual Document Document { get; set; }
         public virtual ICollection<QuizQuestion> Questions { get; set; }
+        public virtual ICollection<QuizAttempt> Attempts { get; set; }
     }
 
     public class QuizQuestion
@@ -99,6 +105,7 @@ namespace SmartNotesAI.Core.Models
 
         public virtual Quiz Quiz { get; set; }
         public virtual User User { get; set; }
+        public virtual ICollection<QuizAnswerEvent> Answers { get; set; }
     }
 
     public class QuizAnswerEvent

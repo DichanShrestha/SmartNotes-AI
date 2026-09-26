@@ -1,0 +1,21 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Launch in Browser (Edge)",
+      "type": "pwa-msedge",
+      "request": "launch",
+      "url": "http://localhost:5000/login.html",
+      "webRoot": "${workspaceFolder}/Web",
+      "preLaunchTask": "Start SmartNotes AI Server"
+    },
+    {
+      "name": "Launch in Browser (Chrome)",
+      "type": "pwa-chrome",
+      "request": "launch",
+      "url": "http://localhost:5000/login.html",
+      "webRoot": "${workspaceFolder}/Web",
+      "preLaunchTask": "Start SmartNotes AI Server"
+    }
+  ]
+}

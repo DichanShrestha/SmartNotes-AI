@@ -2,13 +2,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartNotesAI.Web", "Web\SmartNotesAI.Web.csproj", "{GUID-WEB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartNotesAI.Web", "Web\SmartNotesAI.Web.csproj", "{CE82C171-0E40-4F00-8B97-83D1B560649B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartNotesAI.Core", "Core\SmartNotesAI.Core.csproj", "{GUID-CORE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartNotesAI.Core", "Core\SmartNotesAI.Core.csproj", "{565B6AD9-EAA2-44BA-B4DC-5141758FD010}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartNotesAI.Data", "Data\SmartNotesAI.Data.csproj", "{GUID-DATA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartNotesAI.Data", "Data\SmartNotesAI.Data.csproj", "{A51145F1-A2B3-40BC-AB38-CA9B87ED10CD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartNotesAI.Services", "Services\SmartNotesAI.Services.csproj", "{GUID-SERVICES}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartNotesAI.Services", "Services\SmartNotesAI.Services.csproj", "{4DED5749-C775-4C22-B068-08322041039C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -16,22 +16,22 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{GUID-WEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{GUID-WEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{GUID-WEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{GUID-WEB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{GUID-CORE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{GUID-CORE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{GUID-CORE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{GUID-CORE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{GUID-DATA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{GUID-DATA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{GUID-DATA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{GUID-DATA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{GUID-SERVICES}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{GUID-SERVICES}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{GUID-SERVICES}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{GUID-SERVICES}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE82C171-0E40-4F00-8B97-83D1B560649B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE82C171-0E40-4F00-8B97-83D1B560649B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE82C171-0E40-4F00-8B97-83D1B560649B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE82C171-0E40-4F00-8B97-83D1B560649B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{565B6AD9-EAA2-44BA-B4DC-5141758FD010}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{565B6AD9-EAA2-44BA-B4DC-5141758FD010}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{565B6AD9-EAA2-44BA-B4DC-5141758FD010}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{565B6AD9-EAA2-44BA-B4DC-5141758FD010}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A51145F1-A2B3-40BC-AB38-CA9B87ED10CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A51145F1-A2B3-40BC-AB38-CA9B87ED10CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A51145F1-A2B3-40BC-AB38-CA9B87ED10CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A51145F1-A2B3-40BC-AB38-CA9B87ED10CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4DED5749-C775-4C22-B068-08322041039C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4DED5749-C775-4C22-B068-08322041039C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4DED5749-C775-4C22-B068-08322041039C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4DED5749-C775-4C22-B068-08322041039C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

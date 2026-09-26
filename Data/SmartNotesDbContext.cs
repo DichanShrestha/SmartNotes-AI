@@ -1,4 +1,5 @@
 using System.Data.Entity;
+using System.Data.Entity.ModelConfiguration.Conventions;
 using SmartNotesAI.Core.Models;
 
 namespace SmartNotesAI.Data
@@ -7,6 +8,7 @@ namespace SmartNotesAI.Data
     {
         public SmartNotesDbContext() : base("name=DefaultConnection")
         {
+            Database.SetInitializer(new CreateDatabaseIfNotExists<SmartNotesDbContext>());
         }
 
         public DbSet<User> Users { get; set; }
@@ -22,7 +24,8 @@ namespace SmartNotesAI.Data
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            // Configure conventions and relationships here if necessary
+            modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
+            modelBuilder.Conventions.Remove<ManyToManyCascadeDeleteConvention>();
             base.OnModelCreating(modelBuilder);
         }
     }

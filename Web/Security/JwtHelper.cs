@@ -27,5 +27,37 @@ namespace SmartNotesAI.Web.Security
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
         }
+
+        public static int? ValidateAndGetUserId(string token)
+        {
+            if (string.IsNullOrWhiteSpace(token))
+                return null;
+
+            try
+            {
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var key = Encoding.ASCII.GetBytes(Secret);
+                var validationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ClockSkew = TimeSpan.FromMinutes(5)
+                };
+
+                var principal = tokenHandler.ValidateToken(token, validationParameters, out _);
+                var claim = principal.FindFirst(ClaimTypes.NameIdentifier);
+                if (claim != null && int.TryParse(claim.Value, out int userId))
+                {
+                    return userId;
+                }
+            }
+            catch
+            {
+                // Invalid or expired token
+            }
+            return null;
+        }
     }
 }

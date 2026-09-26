@@ -1,61 +1,155 @@
-using System.Net;
-using System.Net.Http;
+using System;
 using System.Web.Http;
-using SmartNotesAI.Services;
+using SmartNotesAI.Core.DTOs;
 using SmartNotesAI.Data;
+using SmartNotesAI.Services;
 using SmartNotesAI.Web.Security;
 
 namespace SmartNotesAI.Web.Controllers
 {
     [RoutePrefix("api/auth")]
-    public class AuthController : ApiController
+    public class AuthController : BaseApiController
     {
         private readonly AuthService _authService;
+        private readonly SmartNotesDbContext _context;
 
         public AuthController()
         {
-            // In a real scenario, use Dependency Injection (e.g., Unity or Autofac)
-            _authService = new AuthService(new SmartNotesDbContext());
+            _context = new SmartNotesDbContext();
+            _authService = new AuthService(_context);
         }
 
-        public class RegisterDto
+        protected override void Dispose(bool disposing)
         {
-            public string Email { get; set; }
-            public string Password { get; set; }
-            public string DisplayName { get; set; }
+            if (disposing)
+            {
+                _context?.Dispose();
+            }
+            base.Dispose(disposing);
         }
 
         [HttpPost]
         [Route("register")]
-        public IHttpActionResult Register(RegisterDto dto)
+        public IHttpActionResult Register([FromBody] RegisterRequestDto dto)
         {
+            if (dto == null || string.IsNullOrWhiteSpace(dto.Email) || string.IsNullOrWhiteSpace(dto.Password))
+            {
+                return BadRequest("Email and password are required.");
+            }
+
             try
             {
                 var user = _authService.Register(dto.Email, dto.Password, dto.DisplayName);
-                return Ok(new { Message = "Registration successful" });
+                var token = JwtHelper.GenerateToken(user.Id, user.Email);
+
+                return Ok(new AuthResponseDto
+                {
+                    Token = token,
+                    RefreshToken = user.RefreshToken,
+                    User = new UserDto
+                    {
+                        Id = user.Id,
+                        Email = user.Email,
+                        DisplayName = user.DisplayName,
+                        CreatedAt = user.CreatedAt,
+                        LastLoginAt = user.LastLoginAt
+                    }
+                });
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
 
-        public class LoginDto
+        [HttpPost]
+        [Route("login")]
+        public IHttpActionResult Login([FromBody] LoginRequestDto dto)
         {
-            public string Email { get; set; }
-            public string Password { get; set; }
+            if (dto == null || string.IsNullOrWhiteSpace(dto.Email) || string.IsNullOrWhiteSpace(dto.Password))
+            {
+                return BadRequest("Email and password are required.");
+            }
+
+            var user = _authService.Login(dto.Email, dto.Password);
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            var token = JwtHelper.GenerateToken(user.Id, user.Email);
+
+            return Ok(new AuthResponseDto
+            {
+                Token = token,
+                RefreshToken = user.RefreshToken,
+                User = new UserDto
+                {
+                    Id = user.Id,
+                    Email = user.Email,
+                    DisplayName = user.DisplayName,
+                    CreatedAt = user.CreatedAt,
+                    LastLoginAt = user.LastLoginAt
+                }
+            });
         }
 
         [HttpPost]
-        [Route("login")]
-        public IHttpActionResult Login(LoginDto dto)
+        [Route("refresh")]
+        public IHttpActionResult Refresh([FromBody] RefreshTokenRequestDto dto)
         {
-            var user = _authService.Login(dto.Email, dto.Password);
-            if (user == null)
-                return Unauthorized();
+            if (dto == null || string.IsNullOrWhiteSpace(dto.RefreshToken))
+            {
+                return BadRequest("Refresh token is required.");
+            }
 
-            var token = JwtHelper.GenerateToken(user.Id, user.Email);
-            return Ok(new { Token = token, User = new { user.Id, user.Email, user.DisplayName } });
+            int? userId = null;
+            if (!string.IsNullOrWhiteSpace(dto.Token))
+            {
+                userId = JwtHelper.ValidateAndGetUserId(dto.Token);
+            }
+            if (!userId.HasValue)
+            {
+                userId = GetCurrentUserId();
+            }
+
+            if (!userId.HasValue)
+            {
+                return Unauthorized();
+            }
+
+            var user = _authService.RefreshToken(userId.Value, dto.RefreshToken);
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            var newToken = JwtHelper.GenerateToken(user.Id, user.Email);
+            return Ok(new AuthResponseDto
+            {
+                Token = newToken,
+                RefreshToken = user.RefreshToken,
+                User = new UserDto
+                {
+                    Id = user.Id,
+                    Email = user.Email,
+                    DisplayName = user.DisplayName,
+                    CreatedAt = user.CreatedAt,
+                    LastLoginAt = user.LastLoginAt
+                }
+            });
+        }
+
+        [HttpPost]
+        [Route("logout")]
+        public IHttpActionResult Logout()
+        {
+            var userId = GetCurrentUserId();
+            if (userId.HasValue)
+            {
+                _authService.RevokeRefreshToken(userId.Value);
+            }
+            return Ok(new { Message = "Logged out successfully" });
         }
     }
 }

@@ -3,40 +3,316 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SmartNotes AI - Dashboard</title>
+    <title>SmartNotes AI - Intelligent PDF Learning Platform</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <header class="navbar">
-        <h1>SmartNotes AI</h1>
-        <button id="logoutBtn" class="btn btn-secondary">Logout</button>
-    </header>
-    <main class="dashboard">
-        <section class="stats-panel">
-            <div class="stat-card"><h3>Documents</h3><p id="statDocs">0</p></div>
-            <div class="stat-card"><h3>Quizzes</h3><p id="statQuizzes">0</p></div>
-            <div class="stat-card"><h3>Avg Score</h3><p id="statScore">0%</p></div>
-            <div class="stat-card"><h3>Streak</h3><p id="statStreak">0 Days</p></div>
-        </section>
-        
-        <section class="documents-panel">
-            <h2>Your Documents</h2>
-            <div class="upload-section">
-                <input type="file" id="pdfUpload" accept="application/pdf" />
-                <button id="uploadBtn" class="btn">Upload PDF</button>
+    <div class="app-container">
+        <!-- Top Navbar -->
+        <header class="navbar">
+            <div class="navbar-inner">
+                <div class="brand" onclick="navigateTo('dashboard')">
+                    <div class="brand-icon">⚡</div>
+                    <span class="brand-text">SmartNotes AI</span>
+                    <span class="brand-badge">PRO</span>
+                </div>
+                <div class="nav-actions">
+                    <button class="btn btn-secondary btn-sm" onclick="navigateTo('studyPlan')">📚 Study Plan</button>
+                    <div class="streak-pill" title="Consecutive learning streak">
+                        <span class="streak-flame">🔥</span>
+                        <span id="navStreak">0 Days</span>
+                    </div>
+                    <div class="user-profile">
+                        <div class="user-avatar" id="navAvatar">U</div>
+                        <span class="user-name" id="navUsername">User</span>
+                    </div>
+                    <button id="logoutBtn" class="btn btn-secondary btn-sm">Logout</button>
+                </div>
             </div>
-            <div id="documentsList" class="doc-list">
-                <!-- Document items will be rendered here -->
-            </div>
-        </section>
+        </header>
 
-        <section class="study-panel">
-            <h2>Due for Review</h2>
-            <div id="dueList" class="due-list">
-                <!-- Study plan items will be rendered here -->
+        <main class="main-content">
+            <!-- ================= VIEW 1: DASHBOARD ================= -->
+            <div id="dashboardView" class="view-container active">
+                <!-- Stats Grid -->
+                <section class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon-wrapper stat-icon-blue">📄</div>
+                        <div class="stat-details">
+                            <span class="stat-label">Documents Processed</span>
+                            <span class="stat-value" id="statDocs">0</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon-wrapper stat-icon-purple">🎯</div>
+                        <div class="stat-details">
+                            <span class="stat-label">Quizzes Completed</span>
+                            <span class="stat-value" id="statQuizzes">0</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon-wrapper stat-icon-green">📊</div>
+                        <div class="stat-details">
+                            <span class="stat-label">Average Score</span>
+                            <span class="stat-value" id="statScore">0%</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon-wrapper stat-icon-amber">🔥</div>
+                        <div class="stat-details">
+                            <span class="stat-label">Current Streak</span>
+                            <span class="stat-value" id="statStreak">0 Days</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PDF Upload Zone -->
+                <section class="section-panel">
+                    <div class="section-header">
+                        <div class="section-title-wrap">
+                            <h2 class="section-title">Upload Academic PDF</h2>
+                            <span class="section-badge">AI Map-Reduce Pipeline</span>
+                        </div>
+                    </div>
+
+                    <div class="upload-dropzone" id="uploadDropzone">
+                        <div class="upload-icon">📤</div>
+                        <div class="upload-title">Drop your academic PDF here or browse</div>
+                        <div class="upload-subtitle">Supports up to 50MB and ~150 pages. Instant text extraction, section detection & AI generation.</div>
+                        <input type="file" id="pdfUpload" class="upload-file-input" accept="application/pdf" />
+                        <button type="button" class="btn btn-primary" id="selectFileBtn">Select PDF File</button>
+                    </div>
+
+                    <div id="uploadStatusBox" class="upload-status-box">
+                        <span id="uploadSpinner">⏳</span>
+                        <span id="uploadStatusText">Processing upload...</span>
+                    </div>
+                </section>
+
+                <!-- Documents Grid Section -->
+                <section class="section-panel">
+                    <div class="section-header">
+                        <div class="section-title-wrap">
+                            <h2 class="section-title">Your Documents</h2>
+                            <span class="section-badge" id="docCountBadge">0 Total</span>
+                        </div>
+                        <button class="btn btn-secondary btn-sm" onclick="loadDashboard()">🔄 Refresh</button>
+                    </div>
+                    <div id="documentsGrid" class="doc-grid">
+                        <!-- Rendered by JS -->
+                    </div>
+                </section>
+
+                <!-- Due for Review (SM-2 Spaced Repetition) -->
+                <section class="section-panel">
+                    <div class="section-header">
+                        <div class="section-title-wrap">
+                            <h2 class="section-title">Due for Review (SM-2 Spaced Repetition)</h2>
+                            <span class="section-badge" id="dueCountBadge">0 Due</span>
+                        </div>
+                        <button class="btn btn-secondary btn-sm" onclick="navigateTo('studyPlan')">View Full Schedule →</button>
+                    </div>
+                    <div id="dueGrid" class="due-grid">
+                        <!-- Rendered by JS -->
+                    </div>
+                </section>
+
+                <!-- Recent Quiz Attempts -->
+                <section class="section-panel" id="recentAttemptsSection">
+                    <div class="section-header">
+                        <div class="section-title-wrap">
+                            <h2 class="section-title">Recent Quiz Performance</h2>
+                            <span class="section-badge">Mastery Progress</span>
+                        </div>
+                    </div>
+                    <div id="recentAttemptsList" class="doc-list">
+                        <!-- Rendered by JS -->
+                    </div>
+                </section>
             </div>
-        </section>
-    </main>
+
+            <!-- ================= VIEW 2: DOCUMENT DETAIL ================= -->
+            <div id="documentDetailView" class="view-container">
+                <div class="detail-header">
+                    <span class="detail-nav-back" onclick="navigateTo('dashboard')">← Back to Dashboard</span>
+                </div>
+
+                <div class="detail-title-card">
+                    <div>
+                        <h2 id="detailDocTitle" style="font-size: 1.5rem; margin-bottom: 0.35rem;">Document Title</h2>
+                        <div class="doc-card-meta">
+                            <span id="detailPageCount">0 Pages</span>
+                            <span>•</span>
+                            <span id="detailSectionsCount">0 Sections</span>
+                            <span>•</span>
+                            <span id="detailCreatedAt">Uploaded: Date</span>
+                        </div>
+                    </div>
+                    <div id="detailStatusBadge"></div>
+                </div>
+
+                <!-- Tabs Navigation -->
+                <div class="tab-nav">
+                    <button class="tab-btn active" id="tabBtnNotes" onclick="switchDetailTab('notes')">📝 Structured Notes</button>
+                    <button class="tab-btn" id="tabBtnQuiz" onclick="switchDetailTab('quiz')">🎯 Mastery Quiz</button>
+                    <button class="tab-btn" id="tabBtnPlan" onclick="switchDetailTab('plan')">📅 Spaced Repetition Plan</button>
+                </div>
+
+                <!-- Tab 1: Notes Pane -->
+                <div class="tab-pane active" id="paneNotes">
+                    <div style="display: flex; justify-content: flex-end; margin-bottom: 1.25rem;">
+                        <button class="btn btn-secondary btn-sm" id="regenNotesBtn" onclick="regenerateNotes()">
+                            ✨ Regenerate Notes (AI)
+                        </button>
+                    </div>
+                    <div id="notesContainer">
+                        <!-- Notes rendered by JS -->
+                    </div>
+                </div>
+
+                <!-- Tab 2: Quiz Pane -->
+                <div class="tab-pane" id="paneQuiz">
+                    <div class="section-panel" style="text-align: center; padding: 2.5rem 1.5rem;">
+                        <h3 id="quizPaneTitle" style="font-size: 1.5rem; margin-bottom: 0.5rem;">Document Mastery Quiz</h3>
+                        <p style="color: var(--text-muted); margin-bottom: 1.5rem;" id="quizPaneSubtitle">
+                            Test your comprehension with auto-generated Multiple Choice and Short Answer questions.
+                        </p>
+                        <div style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+                            <button class="btn btn-primary btn-lg" id="startQuizBtn" onclick="startQuizFromDetail()">
+                                🚀 Start Quiz Attempt
+                            </button>
+                            <button class="btn btn-secondary" onclick="regenerateQuiz()">
+                                🔄 Regenerate Questions (AI)
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="section-panel" style="margin-top: 1.5rem;">
+                        <h4 style="margin-bottom: 1rem;">Previous Quiz Attempts for this Document</h4>
+                        <div id="docQuizAttemptsList">
+                            <!-- Attempt history rendered by JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 3: Study Plan Pane -->
+                <div class="tab-pane" id="panePlan">
+                    <div class="section-panel">
+                        <h4 style="margin-bottom: 0.5rem;">Document Spaced Repetition Schedule</h4>
+                        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">
+                            Each section is tracked independently via the SuperMemo SM-2 algorithm. Complete quizzes or review sections to optimize retention intervals.
+                        </p>
+                        <div id="docStudyPlanGrid" class="due-grid">
+                            <!-- Items rendered by JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= VIEW 3: ACTIVE QUIZ TAKING ================= -->
+            <div id="quizTakingView" class="view-container">
+                <div class="quiz-container">
+                    <div class="detail-header">
+                        <span class="detail-nav-back" onclick="exitQuiz()">← Exit Quiz</span>
+                        <span id="quizCounterText" style="font-weight: 700; color: var(--primary-light);">Question 1 of 6</span>
+                    </div>
+
+                    <div class="quiz-progress-bar-wrap">
+                        <div class="quiz-progress-bar" id="quizProgressBar"></div>
+                    </div>
+
+                    <!-- Question Card -->
+                    <div class="question-card" id="questionCard">
+                        <div class="question-meta-row">
+                            <span class="diff-badge diff-medium" id="qDiffBadge">MEDIUM</span>
+                            <span class="page-badge" id="qSectionBadge">Section</span>
+                            <span style="font-size: 0.8rem; color: var(--text-muted);" id="qTypeBadge">Multiple Choice</span>
+                        </div>
+
+                        <div class="question-prompt" id="qPromptText">
+                            What is the primary function of the core architecture?
+                        </div>
+
+                        <!-- Options for Multiple Choice -->
+                        <div class="options-container" id="qOptionsContainer">
+                            <!-- Rendered by JS -->
+                        </div>
+
+                        <!-- Input for Short Answer -->
+                        <div id="qShortAnswerContainer" style="display: none;">
+                            <label class="form-label">Type your explanation (graded semantically by Gemini):</label>
+                            <textarea class="short-answer-textarea" id="shortAnswerInput" placeholder="Enter your response here..."></textarea>
+                        </div>
+
+                        <!-- Action Button -->
+                        <div style="display: flex; justify-content: flex-end; margin-top: 1rem;">
+                            <button class="btn btn-primary" id="submitAnswerBtn" onclick="submitCurrentAnswer()">
+                                Submit Answer
+                            </button>
+                            <button class="btn btn-primary" id="nextQuestionBtn" onclick="nextQuestion()" style="display: none;">
+                                Next Question →
+                            </button>
+                        </div>
+
+                        <!-- Feedback Card -->
+                        <div class="feedback-card" id="answerFeedbackCard">
+                            <div class="feedback-title" id="feedbackTitle"></div>
+                            <div class="feedback-explanation" id="feedbackExplanation"></div>
+                        </div>
+                    </div>
+
+                    <!-- Completion Card (Shown at end) -->
+                    <div class="completion-card" id="quizCompletionCard" style="display: none;">
+                        <div class="trophy-icon">🏆</div>
+                        <h2 style="font-size: 2rem; margin-bottom: 0.5rem;">Quiz Complete!</h2>
+                        <div class="score-display" id="finalScoreDisplay">90%</div>
+                        <p id="finalScoreSummary" style="color: var(--text-muted); font-size: 1.05rem;">
+                            You answered 5 out of 6 questions correctly.
+                        </p>
+                        <div class="sm2-update-notice">
+                            <span>✨</span>
+                            <span>SM-2 Spaced Repetition study plan updated for this document!</span>
+                        </div>
+                        <div style="display: flex; justify-content: center; gap: 1rem;">
+                            <button class="btn btn-primary" onclick="returnFromQuiz()">View Document Notes</button>
+                            <button class="btn btn-secondary" onclick="navigateTo('dashboard')">Back to Dashboard</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= VIEW 4: FULL STUDY PLAN ================= -->
+            <div id="studyPlanView" class="view-container">
+                <div class="detail-header">
+                    <span class="detail-nav-back" onclick="navigateTo('dashboard')">← Back to Dashboard</span>
+                </div>
+
+                <div class="section-panel">
+                    <div class="section-header">
+                        <div class="section-title-wrap">
+                            <h2 class="section-title">Personalized Spaced Repetition Schedule</h2>
+                            <span class="section-badge">SuperMemo SM-2</span>
+                        </div>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button class="btn btn-secondary btn-sm active" id="filterDueBtn" onclick="loadStudyPlanFilter('due')">Due Now</button>
+                            <button class="btn btn-secondary btn-sm" id="filterWeekBtn" onclick="loadStudyPlanFilter('week')">This Week</button>
+                            <button class="btn btn-secondary btn-sm" id="filterAllBtn" onclick="loadStudyPlanFilter('all')">All Items</button>
+                        </div>
+                    </div>
+                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">
+                        Rate how well you recall each section to advance its repetition interval (Grade 0 = Complete Blackout, Grade 5 = Perfect Recall).
+                    </p>
+                    <div id="allStudyPlanGrid" class="due-grid">
+                        <!-- Rendered by JS -->
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
     <script src="js/app.js"></script>
 </body>
 </html>
