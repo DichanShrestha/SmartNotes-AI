@@ -256,6 +256,11 @@ function navigateTo(viewName, params = {}) {
         if (view) view.classList.add('active');
         if (pageTitle) pageTitle.textContent = 'Study Plan';
         loadStudyPlanFilter('due');
+    } else if (viewName === 'admin') {
+        const view = document.getElementById('adminView');
+        if (view) view.classList.add('active');
+        if (pageTitle) pageTitle.textContent = 'System Admin Panel';
+        loadAdminDashboard();
     }
     
     // Smooth scroll back to top for a fresh feel
@@ -462,6 +467,65 @@ async function handleFileUpload(file) {
     } catch {
         showToast('Error uploading file. Please try again.', 'error');
         if (statusBox) statusBox.style.display = 'none';
+    }
+}
+
+// --- Admin Panel Loader ---
+async function loadAdminDashboard() {
+    try {
+        const [statsRes, usersRes, docsRes] = await Promise.all([
+            apiFetch('/admin/stats'),
+            apiFetch('/admin/users'),
+            apiFetch('/admin/documents')
+        ]);
+
+        if (statsRes && statsRes.ok) {
+            const stats = await statsRes.json();
+            document.getElementById('adminTotalUsers').textContent = stats.TotalUsers;
+            document.getElementById('adminTotalDocs').textContent = stats.TotalDocuments;
+            document.getElementById('adminTotalQuizzes').textContent = stats.TotalQuizzes;
+            document.getElementById('adminTotalAttempts').textContent = stats.TotalQuizAttempts;
+        }
+
+        if (usersRes && usersRes.ok) {
+            const users = await usersRes.json();
+            const usersList = document.getElementById('adminUsersList');
+            if (usersList) {
+                usersList.innerHTML = users.map(u => `
+                    <tr style="border-bottom: 1px solid var(--border-subtle);">
+                        <td style="padding: 1rem;">${escapeHtml(u.DisplayName || 'User')}</td>
+                        <td style="padding: 1rem;">${escapeHtml(u.Email)}</td>
+                        <td style="padding: 1rem;">${new Date(u.CreatedAt).toLocaleDateString()}</td>
+                        <td style="padding: 1rem;">${u.DocumentCount} Docs</td>
+                    </tr>
+                `).join('');
+            }
+        }
+
+        if (docsRes && docsRes.ok) {
+            const docs = await docsRes.json();
+            const docsList = document.getElementById('adminDocsList');
+            if (docsList) {
+                docsList.innerHTML = docs.map(d => {
+                    let statusColor = 'var(--text-muted)';
+                    if (d.Status === 'Ready') statusColor = 'var(--accent-emerald)';
+                    if (d.Status === 'Failed') statusColor = 'var(--accent-rose)';
+                    return `
+                        <tr style="border-bottom: 1px solid var(--border-subtle);">
+                            <td style="padding: 1rem; max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${escapeHtml(d.OriginalFilename)}">
+                                ${escapeHtml(d.OriginalFilename)}
+                            </td>
+                            <td style="padding: 1rem;">${escapeHtml(d.UserEmail)}</td>
+                            <td style="padding: 1rem; color: ${statusColor}; font-weight: 600;">${escapeHtml(d.Status)}</td>
+                            <td style="padding: 1rem;">${d.PageCount}</td>
+                            <td style="padding: 1rem;">${new Date(d.CreatedAt).toLocaleDateString()}</td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+        }
+    } catch (err) {
+        console.error('Error loading admin data:', err);
     }
 }
 

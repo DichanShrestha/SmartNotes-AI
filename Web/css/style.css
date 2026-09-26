@@ -444,10 +444,10 @@ h1, h2, h3, h4, h5, h6 {
 
 /* --- Upload Dropzone --- */
 .upload-dropzone {
-    border: 2px dashed rgba(99, 102, 241, 0.35);
-    background: rgba(15, 23, 42, 0.5);
+    border: 2px dashed rgba(37, 99, 235, 0.4);
+    background: rgba(37, 99, 235, 0.03);
     border-radius: var(--radius-lg);
-    padding: 2.5rem 1.5rem;
+    padding: 3rem 1.5rem;
     text-align: center;
     cursor: pointer;
     transition: all 0.25s ease;
@@ -456,9 +456,9 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .upload-dropzone:hover, .upload-dropzone.dragover {
-    border-color: var(--primary-light);
-    background: rgba(99, 102, 241, 0.08);
-    box-shadow: 0 0 25px rgba(99, 102, 241, 0.15);
+    border-color: var(--primary);
+    background: rgba(37, 99, 235, 0.08);
+    box-shadow: 0 0 20px rgba(37, 99, 235, 0.1);
 }
 
 .upload-icon {
@@ -630,7 +630,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .due-card {
-    background: rgba(15, 23, 42, 0.6);
+    background: var(--bg-surface);
     border: 1px solid var(--border-subtle);
     border-radius: var(--radius-md);
     padding: 1.15rem;
@@ -638,6 +638,7 @@ h1, h2, h3, h4, h5, h6 {
     flex-direction: column;
     justify-content: space-between;
     transition: all 0.2s ease;
+    box-shadow: var(--shadow-sm);
 }
 
 .due-card:hover {
@@ -846,21 +847,21 @@ h1, h2, h3, h4, h5, h6 {
 
 .markdown-body {
     line-height: 1.75;
-    color: #e2e8f0;
+    color: var(--text-primary);
 }
 
 .markdown-body h2 {
     font-size: 1.2rem;
     margin: 1.25rem 0 0.5rem;
-    color: #93c5fd;
-    border-left: 3px solid var(--primary);
+    color: var(--text-primary);
+    border-left: 3px solid var(--accent-tertiary);
     padding-left: 0.5rem;
 }
 
 .markdown-body h3 {
     font-size: 1.05rem;
     margin: 1rem 0 0.4rem;
-    color: #cbd5e1;
+    color: var(--text-secondary);
 }
 
 .markdown-body p {
@@ -878,27 +879,27 @@ h1, h2, h3, h4, h5, h6 {
 
 .markdown-body blockquote {
     border-left: 4px solid var(--accent-cyan);
-    background: rgba(6, 182, 212, 0.08);
+    background: rgba(2, 132, 199, 0.05);
     padding: 0.75rem 1rem;
     border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
     margin: 1rem 0;
     font-style: italic;
-    color: #e0f2fe;
+    color: var(--text-secondary);
 }
 
 .markdown-body strong {
-    color: white;
+    color: var(--text-primary);
     font-weight: 700;
 }
 
 .markdown-body code {
-    background: rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--border-subtle);
     padding: 0.15rem 0.4rem;
     border-radius: var(--radius-sm);
     font-family: monospace;
     font-size: 0.85em;
-    color: #f472b6;
+    color: var(--accent-rose);
 }
 
 /* --- Quiz Taking Screen --- */
@@ -972,27 +973,28 @@ h1, h2, h3, h4, h5, h6 {
     padding: 1rem 1.25rem;
     border: 1px solid var(--border-subtle);
     border-radius: var(--radius-md);
-    background: rgba(15, 23, 42, 0.6);
+    background: var(--bg-surface);
     cursor: pointer;
     transition: all 0.2s ease;
+    box-shadow: var(--shadow-sm);
 }
 
 .option-item:hover:not(.disabled) {
-    border-color: var(--primary);
-    background: rgba(99, 102, 241, 0.08);
+    border-color: var(--accent-tertiary);
+    background: rgba(37, 99, 235, 0.04);
 }
 
 .option-item.selected {
-    border-color: var(--primary-light);
-    background: rgba(99, 102, 241, 0.18);
-    box-shadow: 0 0 15px rgba(99, 102, 241, 0.2);
+    border-color: var(--accent-tertiary);
+    background: rgba(37, 99, 235, 0.1);
+    box-shadow: 0 0 15px rgba(37, 99, 235, 0.15);
 }
 
 .option-letter {
     width: 28px;
     height: 28px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(0, 0, 0, 0.05);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1002,14 +1004,14 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .option-item.selected .option-letter {
-    background: var(--primary);
+    background: var(--accent-tertiary);
     color: white;
 }
 
 .short-answer-textarea {
     width: 100%;
     min-height: 110px;
-    background: rgba(15, 23, 42, 0.8);
+    background: var(--bg-surface);
     border: 1px solid var(--border-subtle);
     border-radius: var(--radius-md);
     padding: 1rem;
@@ -1019,12 +1021,13 @@ h1, h2, h3, h4, h5, h6 {
     line-height: 1.5;
     margin-bottom: 1.25rem;
     resize: vertical;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
 }
 
 .short-answer-textarea:focus {
     outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 15px rgba(99, 102, 241, 0.25);
+    border-color: var(--accent-tertiary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
 }
 
 .feedback-card {
@@ -1115,12 +1118,11 @@ h1, h2, h3, h4, h5, h6 {
 .auth-card {
     width: 100%;
     max-width: 440px;
-    background: rgba(17, 24, 39, 0.8);
-    border: 1px solid var(--border-card);
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
     border-radius: var(--radius-lg);
-    padding: 2.5rem;
-    backdrop-filter: blur(20px);
-    box-shadow: var(--shadow-lg), var(--shadow-glow);
+    padding: 3rem 2.5rem;
+    box-shadow: var(--shadow-lg);
 }
 
 .auth-header {
@@ -1154,10 +1156,10 @@ h1, h2, h3, h4, h5, h6 {
 .form-input {
     width: 100%;
     padding: 0.75rem 1rem;
-    background: rgba(15, 23, 42, 0.9);
+    background: var(--bg-base);
     border: 1px solid var(--border-subtle);
     border-radius: var(--radius-md);
-    color: white;
+    color: var(--text-primary);
     font-family: inherit;
     font-size: 0.95rem;
     transition: all 0.2s;
@@ -1165,8 +1167,8 @@ h1, h2, h3, h4, h5, h6 {
 
 .form-input:focus {
     outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 15px rgba(99, 102, 241, 0.25);
+    border-color: var(--accent-tertiary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
 }
 
 .auth-footer {
@@ -1177,7 +1179,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .auth-footer a {
-    color: var(--primary-light);
+    color: var(--accent-tertiary);
     text-decoration: none;
     font-weight: 600;
 }
@@ -1200,10 +1202,10 @@ h1, h2, h3, h4, h5, h6 {
 
 .toast {
     pointer-events: auto;
-    background: rgba(15, 23, 42, 0.95);
-    border: 1px solid var(--border-card);
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
     border-radius: var(--radius-md);
-    padding: 0.85rem 1.25rem;
+    padding: 1rem 1.25rem;
     box-shadow: var(--shadow-lg);
     display: flex;
     align-items: center;
@@ -1211,6 +1213,7 @@ h1, h2, h3, h4, h5, h6 {
     min-width: 280px;
     max-width: 400px;
     animation: toastSlideIn 0.3s ease;
+    color: var(--text-primary);
 }
 
 @keyframes toastSlideIn {
