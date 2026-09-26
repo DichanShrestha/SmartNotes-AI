@@ -9,6 +9,7 @@ namespace SmartNotesAI.Core.Models
         public string Email { get; set; }
         public string PasswordHash { get; set; }
         public string DisplayName { get; set; }
+        public bool IsAdmin { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? LastLoginAt { get; set; }
         public string RefreshToken { get; set; }
